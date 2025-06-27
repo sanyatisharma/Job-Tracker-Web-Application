@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Application Details</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .detail-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .job-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+    
+    .job-company {
+      font-size: 18px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .status-label {
+      margin-top: 10px;
+    }
+    
+    .detail-section {
+      margin-bottom: 30px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      width: 150px;
+      margin-right: 20px;
+    }
+    
+    .detail-value {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .notes-section {
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    
+    .notes-content {
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    
+    .notes-editor {
+      width: 100%;
+      min-height: 150px;
+      margin-top: 10px;
+      padding: 10px;
+      font-family: inherit;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background-color: #003366;
+      color: white;
+    }
+    
+    .btn-secondary {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    
+    .btn-danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+    
+    .edit-mode-controls {
+      display: none;
+    }
+    
+    /* Dark mode styles */
+    body.dark-mode .detail-section,
+    body.dark-mode .notes-section {
+      background-color: #162b48;
+      color: #fff;
+    }
+    
+    body.dark-mode .section-title {
+      border-bottom-color: #334566;
+    }
+    
+    body.dark-mode .notes-editor {
+      background-color: #0f1d32;
+      color: #fff;
+      border-color: #334566;
+    }
+    
+    body.dark-mode .btn-secondary {
+      background-color: #334566;
+      color: #fff;
+    }
+    
+    body.dark-mode .detail-row {
+      border-bottom-color: #334566;
+    }
+    
+    body.dark-mode .job-company {
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <h1>Job Tracker</h1>
+      <nav>
+        <a href="home.html">Job List</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="logout-btn">Logout</a>
+        <button id="dark-mode-toggle">Dark Mode</button>
+      </nav>
+    </div>
+  </header>
+  
+  <main>
+    <div class="detail-container">
+      <div class="job-header">
+        <div>
+          <h2 class="job-title" id="job-title-display"></h2>
+          <div class="job-company" id="job-company-display"></div>
+        </div>
+        <div class="status-label">
+          <span class="status-badge" id="job-status-badge"></span>
+        </div>
+      </div>
+      
+      <!-- View Mode -->
+      <div id="view-mode">
+        <div class="detail-section">
+          <h3 class="section-title">Job Details</h3>
+          <div class="detail-row">
+            <div class="detail-label">Application Date:</div>
+            <div class="detail-value" id="application-date-display"></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Deadline:</div>
+            <div class="detail-value" id="deadline-date-display"></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Status:</div>
+            <div class="detail-value" id="status-display"></div>
+          </div>
+        </div>
+        
+        <div class="notes-section">
+          <h3 class="section-title">Notes</h3>
+          <div class="notes-content" id="notes-display"></div>
+        </div>
+        
+        <div class="action-row">
+          <div class="btn-group">
+            <button class="btn btn-primary" id="edit-btn">Edit</button>
+            <button class="btn btn-danger" id="delete-btn">Delete</button>
+          </div>
+          <div>
+            <button class="btn btn-secondary" id="back-btn">Back to List</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Edit Mode -->
+      <div id="edit-mode" style="display: none;">
+        <form id="edit-form">
+          <div class="detail-section">
+            <h3 class="section-title">Edit Job Details</h3>
+            <div class="detail-row">
+              <div class="detail-label">Job Title:</div>
+              <div class="detail-value">
+                <input type="text" id="job-title-input" class="form-control" required>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Company:</div>
+              <div class="detail-value">
+                <input type="text" id="job-company-input" class="form-control" required>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Application Date:</div>
+              <div class="detail-value">
+                <input type="date" id="application-date-input" class="form-control">
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Deadline:</div>
+              <div class="detail-value">
+                <input type="date" id="deadline-date-input" class="form-control">
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Status:</div>
+              <div class="detail-value">
+                <select id="status-input" class="form-control">
+                  <option value="bookmark">Bookmark</option>
+                  <option value="applied">Applied</option>
+                  <option value="interview">Interview</option>
+                  <option value="accepted">Accepted</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="notes-section">
+            <h3 class="section-title">Edit Notes</h3>
+            <textarea id="notes-input" class="notes-editor" placeholder="Add notes about this job application..."></textarea>
+          </div>
+          
+          <div class="action-row">
+            <div class="btn-group">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+              <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Job Tracker</p>
+  </footer>
+
+  <script src="job-detail.js"></script>
+</body>
+</html>

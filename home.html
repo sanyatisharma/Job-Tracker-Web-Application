@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Tracker Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <h1>Job Tracker</h1>
+      <nav>
+        <a href="home.html" class="active">Job List</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="logout-btn">Logout</a>
+        <a id="dark-mode-toggle">Dark Mode</a>
+      </nav>
+    </div>
+  </header>
+  
+  <main>
+    <section class="dashboard">
+      <h2>Add a New Job</h2>
+      <form id="add-job-form" class="job-form">
+        <div class="input-row">
+          <input type="text" id="job-title" placeholder="Job Title" required />
+          <input type="text" id="company-name" placeholder="Company Name" required />
+        </div>
+        <textarea id="job-notes" placeholder="Notes..." rows="3"></textarea>
+        <div class="date-row">
+          <div class="form-group">
+            <label for="application-date">Application Date</label>
+            <input type="date" id="application-date" name="application-date">
+          </div>
+          <div class="form-group">
+            <label for="deadline-date">Deadline</label>
+            <input type="date" id="deadline-date" name="deadline-date">
+          </div>
+        </div>                    
+
+        <select id="job-status">
+          <option value="bookmark">Bookmark</option>
+          <option value="applied">Applied</option>
+          <option value="interview">Interview</option>
+          <option value="accepted">Accepted</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <button type="submit">Add Job</button>
+      </form>           
+
+      <h2>Your Applied Jobs</h2>
+      <label for="search-bar">Search Jobs:</label>
+      <input type="text" id="search-bar" placeholder="Search by job title or company" />
+      <label for="filter-status">Filter by Status:</label>
+      <select id="filter-status">
+        <option value="all">All</option>
+        <option value="bookmark">Bookmark</option>
+        <option value="applied">Applied</option>
+        <option value="interview">Interview</option>
+        <option value="accepted">Accepted</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
+      <table class="job-table">
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Applied On</th>
+            <th>Notes</th>
+            <th>Deadline</th>
+            <th>Status</th>
+          </tr>
+        </thead>        
+        <tbody id="job-list-body">
+          <!-- Jobs will be inserted here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Job Tracker</p>
+  </footer>
+
+  <script>
+    // Add logout functionality
+    document.getElementById('logout-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      window.location.href = 'index.html';
+    });
+    
+    // Debug function to check jobs data
+    window.checkJobsData = function() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('No token found');
+        return;
+      }
+      
+      fetch('http://localhost:5000/api/jobs', {
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Jobs data:', data);
+        if (data.success) {
+          console.log('Number of jobs:', data.jobs.length);
+          console.log('Jobs details:', data.jobs);
+        } else {
+          console.error('Error:', data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+    };
+    
+    // Call checkJobsData on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(checkJobsData, 1000);
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
