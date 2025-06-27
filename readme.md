@@ -2,6 +2,7 @@
 
 # Overview
 Job Tracker is a full-stack web application designed to simplify the job and internship search process. It serves as a one-stop platform for users to store and manage their job applications, interviews, and job offers. Built using a MySQL database, a Python-based Flask backend, and a clean HTML/CSS frontend, the system provides an integrated solution for tracking career opportunities, ensuring users stay organized and proactive in their job hunt.
+
 Students often rely on spreadsheets or memory to track multiple applications, interviews, and deadlines, this lack of structure leads to missed opportunities and confusion. Job Tracker bridges this gap by offering user-friendly tools such as a customizable dashboard, real-time application status tracking, automated reminders, and dynamic filtering by company, job type, or application status. The system follows a carefully planned development cycle including database modeling, backend API creation, frontend design, and complete system integration, resulting in a professional and user-centric solution.
 
 # Objectives :
